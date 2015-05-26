@@ -1,7 +1,6 @@
 package menon.cs5050.assignment2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +87,7 @@ public class BmStringMatcher extends StringMatcher {
 	private int getPatternShiftValue(char mismatchedCharacter, int mismatchIndex) {
 		
 		Character mismatchValue = Character.valueOf(Character.toLowerCase(mismatchedCharacter));
-		int badMatchShift = 0, goodSuffixShift = 0, patternLength = getPattern().length();
+		int badMatchShift = 0, goodSuffixShift = 0;
 		
 		if (this.badMatchShiftTable.containsKey(mismatchValue)) {
 			badMatchShift = Math.max(1, mismatchIndex - this.badMatchShiftTable.get(mismatchValue).intValue());
@@ -96,15 +95,55 @@ public class BmStringMatcher extends StringMatcher {
 			badMatchShift = 1;
 		}
 		
-		goodSuffixShift = this.goodSuffixShiftTable[mismatchIndex];
+		if (mismatchIndex == getPattern().length() - 1) {
+			goodSuffixShift = 1;
+		} else {
+			goodSuffixShift = getPattern().length() - this.goodSuffixShiftTable[mismatchIndex + 1] - 1;
+		}
 		
 		return Math.max(badMatchShift, goodSuffixShift);
 			
 	}
 
+	/*
+	 * Match the pattern with the text. Start by placing at the beginning of the text. At each mismatch, shift by the maximum of the amount computed
+	 * from the bad match shift table and the good suffix shift table
+	 */
 	@Override
 	public List<Integer> match() {
-		return null;
+		
+		int textLength = getText().length(), patternLength = getPattern().length();
+		
+		if (patternLength > textLength) {
+			return null;
+		}
+		
+		List<Integer> returnValue = new ArrayList<Integer>();
+
+		//Loop through the text string
+		for (int patternEndingPosition = patternLength -1; patternEndingPosition <= textLength -1;) {
+		
+			//Check and see if the section of the text matches the pattern
+			int textPosition = patternEndingPosition, amountToShiftBy = 0;
+			for (int patternIndex = patternLength - 1; patternIndex >= 0; --patternIndex, --textPosition) {
+		
+				if (Character.toLowerCase(getPattern().charAt(patternIndex)) != Character.toLowerCase(getText().charAt(textPosition))) {
+					
+					amountToShiftBy = getPatternShiftValue(Character.toLowerCase(getText().charAt(textPosition)), patternIndex);
+					patternEndingPosition += amountToShiftBy;
+					break;
+					
+				}
+		
+				if (patternIndex == 0) {
+					returnValue.add(Integer.valueOf(textPosition));
+					patternEndingPosition += getPattern().length();
+				}
+			}
+			
+		}
+		
+		return returnValue;
 	}
 
 }
