@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * String Matcher using Boyer-More string matching algorithm
+ *
+ */
 public class BmStringMatcher extends StringMatcher {
 	
 	private Map<Character, Integer> badMatchShiftTable;

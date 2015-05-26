@@ -3,7 +3,10 @@ package menon.cs5050.assignment2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KmpStringMatcher extends StringMatcher {
+/**
+ * String Matcher using Knuth-Morris-Pratt string matching algorithm
+ *
+ */public class KmpStringMatcher extends StringMatcher {
  
 	private int[] patternPrefixTable;
 	
@@ -23,10 +26,10 @@ public class KmpStringMatcher extends StringMatcher {
 		for (int j = 1; j < patternLength; j++) {
 		
 			int i = this.patternPrefixTable[j - 1];
-			while ((getPattern().charAt(j) != getPattern().charAt(i + 1)) && i >= 0) {
+			while ((Character.toLowerCase(getPattern().charAt(j)) != Character.toLowerCase(getPattern().charAt(i + 1))) && i >= 0) {
 				i = this.patternPrefixTable[i];
 			}
-			if (getPattern().charAt(j) == getPattern().charAt(i + 1)) {
+			if (Character.toLowerCase(getPattern().charAt(j)) == Character.toLowerCase(getPattern().charAt(i + 1))) {
 				this.patternPrefixTable[j] = i + 1;
 			} else {
 				this.patternPrefixTable[j] = -1;
@@ -37,9 +40,14 @@ public class KmpStringMatcher extends StringMatcher {
 	@Override
 	public List<Integer> match() {
 		
+		
 		int textIndex = 0, patternIndex = 0;
 		int textLength = getText().length();
 		int patternLength = getPattern().length();
+		
+		if (patternLength > textLength) {
+			return null;
+		}
 		
 		List<Integer> returnValue = new ArrayList<Integer>();
 		
@@ -51,7 +59,7 @@ public class KmpStringMatcher extends StringMatcher {
 					break;
 				}
 				
-				if (getText().charAt(textIndex) == getPattern().charAt(patternIndex)) {
+				if (Character.toLowerCase(getText().charAt(textIndex)) == Character.toLowerCase(getPattern().charAt(patternIndex))) {
 					++textIndex;
 					++patternIndex;
 				} else if (patternIndex == 0) {

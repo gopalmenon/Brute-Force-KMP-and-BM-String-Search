@@ -17,7 +17,7 @@ public abstract class StringMatcher {
 	
 	StringMatcher(String text, String pattern) {
 		this.text = text;
-		this.pattern = pattern;
+		this.pattern = pattern.trim();
 	}
 	
 	public abstract List<Integer> match();

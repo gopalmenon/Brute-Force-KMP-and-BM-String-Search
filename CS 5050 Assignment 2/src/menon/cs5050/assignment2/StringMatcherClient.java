@@ -4,14 +4,22 @@ import java.util.List;
 
 public class StringMatcherClient {
 
-	public static final String TEXT = "atcgcacattatacattattatacat";
-	public static final String SHEEP = "attataca";
+	public static final String TEXT =  "TGCTGGTCTGGTTCTCTTTCTCTCCGTGACCTATAGAGCAAGGTGGAGGGGTAGGAGGGGGACACCCAGTGAAGGGTCCTTTGGCCTTGTAGTTTCTTAGAGGCTTCTTCTGGGAACATGTACTGGGAGCTGGGGTGGGTCCTGCACCTGCATGGGGCCATTTCCCTTCGTGGGCCCACAGACAACTGTTCCCCACCACGGAGGGAAGGAGACGCACAGGGCCTGGGCCTTCTTCTCTGAGAACACTCTCAAGCAGAACTCGCCGTCTTTGAAGGGTTCAAATGTGGATGGCACCACCAGGTACTCCCCAGGGGGCAGCCGGGCCCGGCCAGAGACCTCCCGCAGGTTGACGTAGGTGCTGGTGCGGGCTGAGGGCTGGTAGGCCAGGAAGAAATCCCGGCCCAAGTGTGCGTCCGTGTGACTCTCCAGCTGCACGAAACAATAAGCAGAGTCAATTTCTTGTTAAATCCTGGAAGATGAGAGCCCAAGAGTTCAGCTTTATTGTGCTGATTTAGGAATTATTGATTTTTACCATTGCACCAAGAATCAGGAGGCCGTGGATTCTGTTGTGAACTCACTGTATGTCAATCATCAAGTGTATTTTCAGTGCCTTCTGGGTGCCAGGCCCTGTTTGAGGCATTGATCTTGACTGTGTGACCTTGACCTCTGGGCCTCCCCAGTTAAACGAAGGTTGAGGGACAGGGTCTCTAGTGTGCGCTCAGCTTCTCTCTGGATATTTTTCCTCTCTAATCCAATAGGCTCTTTCATTCTGCAGCTGTCTCTGGGAGTGTGGCATTGATCTTCCCAGTACAGGCCCAAGGCTGGAGAAAAGAGCTTAAA";
+	public static final String PATTERN = "ccatt";
 	
 	public static void main(String[] args) {
 		
-		KmpStringMatcher kmpStringMatcher = new KmpStringMatcher(TEXT, SHEEP);
-		List<Integer> matchPosition = kmpStringMatcher.match();
-		System.out.println("Match found at position " + matchPosition);
+		KmpStringMatcher kmpStringMatcher = new KmpStringMatcher(TEXT, PATTERN);
+		List<Integer> matchPositionKmp = kmpStringMatcher.match();
+		System.out.println("Match found by KMP Matcher at position " + matchPositionKmp);
+		
+		BmStringMatcher bmStringMatcher = new BmStringMatcher(TEXT, PATTERN);
+		List<Integer> matchPositionBm = bmStringMatcher.match();
+		System.out.println("Match found by BM Matcher at position " + matchPositionBm);
+		
+		NaiveStringMatcher naiveStringMatcher = new NaiveStringMatcher(TEXT, PATTERN);
+		List<Integer> matchPositionNaive = naiveStringMatcher.match();
+		System.out.println("Match found by Naive Matcher at position " + matchPositionNaive);
 	}
 
 }
