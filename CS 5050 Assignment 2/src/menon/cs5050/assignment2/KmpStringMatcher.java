@@ -23,31 +23,31 @@ import java.util.List;
 		
 		int patternLength = getPattern().length();
 		this.patternPrefixTable[0] = -1;
-		for (int patternIndex = 1; patternIndex < patternLength; patternIndex++) {
+		int shiftAmount = -1;
 		
-			int shiftAmount = this.patternPrefixTable[patternIndex - 1];
-			while ((Character.toLowerCase(getPattern().charAt(patternIndex)) != Character.toLowerCase(getPattern().charAt(shiftAmount + 1))) && shiftAmount >= 0) {
+		for (int patternIndex = 1; patternIndex < patternLength; ++patternIndex) {
+		
+			while (shiftAmount > 0 && (Character.toLowerCase(getPattern().charAt(shiftAmount + 1)) != Character.toLowerCase(getPattern().charAt(patternIndex)))) {
 				shiftAmount = this.patternPrefixTable[shiftAmount];
 			}
-			if (Character.toLowerCase(getPattern().charAt(patternIndex)) == Character.toLowerCase(getPattern().charAt(shiftAmount + 1))) {
-				this.patternPrefixTable[patternIndex] = shiftAmount + 1;
-			} else {
-				this.patternPrefixTable[patternIndex] = -1;
+			if (Character.toLowerCase(getPattern().charAt(shiftAmount +1)) == Character.toLowerCase(getPattern().charAt(patternIndex))) {
+				shiftAmount += 1;
 			}
+			this.patternPrefixTable[patternIndex] = shiftAmount;
 		}
+		
 	}
-	
+
 	@Override
 	public List<Integer> match() {
 				
-		int textIndex = 0, patternIndex = 0;
-		int textLength = getText().length();
-		int patternLength = getPattern().length();
+		int textLength = getText().length(), patternLength = getPattern().length();
 		
 		if (patternLength > textLength) {
 			return null;
 		}
 		
+		int textIndex = 0, patternIndex = 0;
 		List<Integer> returnValue = new ArrayList<Integer>();
 		
 		while (textIndex < textLength ) {
@@ -59,11 +59,14 @@ import java.util.List;
 				}
 				
 				if (Character.toLowerCase(getText().charAt(textIndex)) == Character.toLowerCase(getPattern().charAt(patternIndex))) {
+					//Keep advancing both pointers
 					++textIndex;
 					++patternIndex;
 				} else if (patternIndex == 0) {
+					//Advance the text string pointer 
 					++textIndex;
 				} else {
+					//Shift the pattern based on the value in the pattern prefix table 
 					patternIndex = this.patternPrefixTable[patternIndex - 1] + 1;
 				}
 				
