@@ -23,24 +23,23 @@ import java.util.List;
 		
 		int patternLength = getPattern().length();
 		this.patternPrefixTable[0] = -1;
-		for (int j = 1; j < patternLength; j++) {
+		for (int patternIndex = 1; patternIndex < patternLength; patternIndex++) {
 		
-			int i = this.patternPrefixTable[j - 1];
-			while ((Character.toLowerCase(getPattern().charAt(j)) != Character.toLowerCase(getPattern().charAt(i + 1))) && i >= 0) {
-				i = this.patternPrefixTable[i];
+			int shiftAmount = this.patternPrefixTable[patternIndex - 1];
+			while ((Character.toLowerCase(getPattern().charAt(patternIndex)) != Character.toLowerCase(getPattern().charAt(shiftAmount + 1))) && shiftAmount >= 0) {
+				shiftAmount = this.patternPrefixTable[shiftAmount];
 			}
-			if (Character.toLowerCase(getPattern().charAt(j)) == Character.toLowerCase(getPattern().charAt(i + 1))) {
-				this.patternPrefixTable[j] = i + 1;
+			if (Character.toLowerCase(getPattern().charAt(patternIndex)) == Character.toLowerCase(getPattern().charAt(shiftAmount + 1))) {
+				this.patternPrefixTable[patternIndex] = shiftAmount + 1;
 			} else {
-				this.patternPrefixTable[j] = -1;
+				this.patternPrefixTable[patternIndex] = -1;
 			}
 		}
 	}
 	
 	@Override
 	public List<Integer> match() {
-		
-		
+				
 		int textIndex = 0, patternIndex = 0;
 		int textLength = getText().length();
 		int patternLength = getPattern().length();
@@ -70,7 +69,10 @@ import java.util.List;
 				
 			}
 			
-			returnValue.add(Integer.valueOf((patternIndex == patternLength) ? (textIndex - patternLength) : -1));
+			if (patternIndex == patternLength) {
+				returnValue.add(Integer.valueOf(textIndex - patternLength));
+			}
+
 			patternIndex = 0;
 			
 		}
