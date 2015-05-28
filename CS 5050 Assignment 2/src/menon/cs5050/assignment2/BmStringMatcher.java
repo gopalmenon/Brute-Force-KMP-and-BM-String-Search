@@ -21,8 +21,8 @@ public class BmStringMatcher extends StringMatcher {
 		this.badMatchShiftTable = new HashMap<Character, Integer>(pattern.length());
 		populateBadMatchShiftTable();
 		
-		this.goodSuffixShiftTable = new int[pattern.length()];
-		populateGoodSuffixShiftTable();
+		//this.goodSuffixShiftTable = new int[pattern.length()];
+		//populateGoodSuffixShiftTable();
 		
 	}
 	
@@ -99,13 +99,13 @@ public class BmStringMatcher extends StringMatcher {
 			badMatchShift = 1;
 		}
 		
-		if (mismatchIndex == getPattern().length() - 1) {
-			goodSuffixShift = 1;
-		} else {
-			goodSuffixShift = getPattern().length() - this.goodSuffixShiftTable[mismatchIndex + 1] - 1;
-		}
-		
-		return Math.max(badMatchShift, goodSuffixShift);
+		//if (mismatchIndex == getPattern().length() - 1) {
+		//	goodSuffixShift = 1;
+		//} else {
+		//	goodSuffixShift = getPattern().length() - this.goodSuffixShiftTable[mismatchIndex + 1] - 1;
+		//}
+		return badMatchShift;
+		//return Math.max(badMatchShift, goodSuffixShift);
 			
 	}
 
